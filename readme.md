@@ -76,7 +76,6 @@ python3 ../tests/PyKDLtest.py
 ``` bash
 cd third_party/Pointnet2_PyTorch
 pip install pointnet2_ops_lib/.
-cd ../..
 ```
 ### Prepare Data
 #### DexYCB
@@ -98,6 +97,11 @@ The processed 1000 scenes will be in `data/scene/00/00`, from `data/scene/00/00/
 
 ### Evaluate Pre-trained Models
 Our pre-trained models can be downloaded [here](https://drive.google.com/drive/folders/1kbQR3xXJJp4rUZ-pytH7vTQVBNaJgM4O?usp=drive_link).
+After downloading, the relevant models will reside at the path `./Models/seed_{1,2,3}`, and will be named `BC_actor_PandaYCBEnv_latest.zip` with supporting `BC_state_feat_PandaYCBEnv_latest.zip`.
+Set the variable `model_dir` to the path of the folder containing model parameters:
+``` bash
+export model_dir='Models/seed_{n}'
+```
 
 We use [ray](https://github.com/ray-project/ray) for parallel evaluation in order to support larger test set. One can feel free to adjust `CUDA_VISIBLE_DEVICES` (the GPUs to use) and `num_runners` (the total number of runners) according to the local machine, without changing the evaluation results.
 
@@ -110,7 +114,6 @@ CUDA_VISIBLE_DEVICES=0 python -m evaluate \
     pointnet2.model.pretrained_dir=${model_dir} \
     pointnet2.model.pretrained_source=handoversim
 ```
-Here `model_dir` should be the path of the folder containing model parameters.
 #### on DexYCB Test Set (Sequential)
 ``` bash
 CUDA_VISIBLE_DEVICES=0 python -m evaluate \
@@ -120,6 +123,8 @@ CUDA_VISIBLE_DEVICES=0 python -m evaluate \
     pointnet2.model.pretrained_source=handoversim \
     pointnet2.wait_time=3
 ```
+Note that if you encounter 'out of memory' error during evaluation, you can reduce the `num_runners` parameter.
+
 ### Visualization
 To visualize the handover process, one can have two options:
 #### Use `pybullet` GUI

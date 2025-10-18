@@ -67,8 +67,14 @@ class PolicyNetwork(nn.Module):
             checkpoint = torch.load(os.path.join(self.cfg.pretrained_dir, f"{self.cfg.pretrained_suffix}.pth"))
             self.load_state_dict(checkpoint["state_dict"])
         elif self.cfg.pretrained_source == "handoversim":
-            actor_weight = torch.load(os.path.join(self.cfg.pretrained_dir, f"BC_actor_PandaYCBEnv_{self.cfg.pretrained_suffix}"))["net"]
-            encoder_weight = torch.load(os.path.join(self.cfg.pretrained_dir, f"BC_state_feat_PandaYCBEnv_{self.cfg.pretrained_suffix}"))["net"]
+            actor_path = os.path.join(self.cfg.pretrained_dir, f"BC_actor_PandaYCBEnv_{self.cfg.pretrained_suffix}")
+            encoder_path = os.path.join(self.cfg.pretrained_dir, f"BC_state_feat_PandaYCBEnv_{self.cfg.pretrained_suffix}")
+            if not os.path.exists(actor_path):
+                actor_path += ".zip"
+            if not os.path.exists(encoder_path):
+                encoder_path += ".zip"
+            actor_weight = torch.load(actor_path, weights_only=False)["net"]
+            encoder_weight = torch.load(encoder_path, weights_only=False)["net"]
             self.encoder.SA_modules[0].load_state_dict(get_submodule_weights(encoder_weight, "module.encoder.0.0."))
             self.encoder.SA_modules[1].load_state_dict(get_submodule_weights(encoder_weight, "module.encoder.0.1."))
             self.encoder.SA_modules[2].load_state_dict(get_submodule_weights(encoder_weight, "module.encoder.0.2."))
