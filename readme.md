@@ -35,11 +35,16 @@ git clone --recursive git@github.com:chenjy2003/genh2r.git
 
 ### Create Python Environment
 ``` bash
-conda create -n genh2r python=3.10
-conda activate genh2r
+python3.10 -m venv .genh2r
+source .genh2r/bin/activate
+
+pip install vtk==9.4.2
+pip install wheel
+pip install mayavi --no-cache-dir --verbose  --no-build-isolation  
 pip install -r requirements.txt
+
 # install pytorch according to your cuda version (https://pytorch.org/get-started/previous-versions/)
-pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
+pip install torch==2.9.0+cu128 torchvision==0.24.0+cu128 torchaudio --extra-index-url https://download.pytorch.org/whl/cu128 # for Cuda 12.8
 ```
 
 ### Install Third Party Packages
@@ -62,7 +67,8 @@ cd build
 ROS_PYTHON_VERSION=3.10 cmake ..
 make
 sudo make install
-cp PyKDL.so $CONDA_PREFIX/lib/python3.10/site-packages/
+ls # check for the library filename. For me it was PyKDL.cpython-310-x86_64-linux-gnu.so
+cp PyKDL.xxx.so ../../../../../.genh2r/lib/python3.10/site-packages/
 ## test
 python3 ../tests/PyKDLtest.py
 ```
