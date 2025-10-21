@@ -30,7 +30,7 @@ We are actively cleaning the code for simulation scene construction, demonstrati
 
 ### Clone Repository
 ``` bash
-git clone --recursive git@github.com:chenjy2003/genh2r.git
+git clone --recursive https://github.com/Incomprehensible/genh2r.git
 ```
 
 ### Create Python Environment
